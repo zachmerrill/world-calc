@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
+const isClient = typeof window !== "undefined";
+
+export function clearLocalStorage() {
+  if (!isClient) return;
+  localStorage.clear();
+}
 
 export default function useLocalStorage<T>(
   key: string,
   initialValue: T
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
-  const isClient = typeof window !== "undefined";
-
   const [storedValue, setStoredValue] = useState<T>(() => {
     if (!isClient) return initialValue;
 
@@ -24,7 +28,7 @@ export default function useLocalStorage<T>(
     try {
       localStorage.setItem(key, JSON.stringify(storedValue));
     } catch (e) {}
-  }, [key, storedValue, isClient]);
+  }, [key, storedValue]);
 
   return [storedValue, setStoredValue];
 }

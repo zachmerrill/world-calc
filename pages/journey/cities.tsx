@@ -1,10 +1,10 @@
 import Head from "next/head";
-import NextButton from "../../components/journey/next";
-import useSWR from "swr";
-import dataFetcher from "../../util/dataFetcher";
-import Title from "../../components/journey/title";
 import React, { useEffect, useState } from "react";
+import useSWR from "swr";
+import JourneyNavigation from "../../components/journey/navigation";
+import Title from "../../components/title";
 import useLocalStorage from "../../hooks/useLocalStorage";
+import dataFetcher from "../../util/dataFetcher";
 
 function City({
   children,
@@ -87,7 +87,7 @@ export default function Cities() {
             <>Loading...</>
           )}
         </div>
-        <NextButton onClick={handleSubmit} />
+        <JourneyNavigation onClick={handleSubmit} />
       </main>
     </>
   );

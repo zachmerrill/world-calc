@@ -1,8 +1,8 @@
 import Head from "next/head";
-import { useContext, useEffect, useReducer } from "react";
-import CountryOptions from "../../components/journey/countryOptions";
-import Title from "../../components/journey/title";
-import { JourneyContext } from "../../contexts/journeyContext";
+import { useEffect, useReducer } from "react";
+import CountryOptions from "../../components/countryOptions";
+import JourneyNavigation from "../../components/journey/navigation";
+import Title from "../../components/title";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
 type Form = {
@@ -39,8 +39,6 @@ export default function Family() {
     initialState
   );
 
-  const { nextPage } = useContext(JourneyContext);
-
   function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
     const target = e.target as typeof e.target & {
@@ -53,7 +51,6 @@ export default function Family() {
       fatherBirthLoc: target.fatherBirthLoc.value,
       motherBirthLoc: target.motherBirthLoc.value,
     });
-    nextPage();
   }
 
   return (
@@ -115,11 +112,9 @@ export default function Family() {
               <CountryOptions />
             </select>
           </label>
-          <input
+          <JourneyNavigation
             disabled={!(!!form.fatherBirthLoc && !!form.motherBirthLoc)}
             type="submit"
-            value="Next"
-            className="flex w-32 justify-center rounded-full bg-gradient-to-r from-emerald-600 via-emerald-600 to-emerald-400 p-2 font-bold text-cyan-50 hover:from-emerald-600 hover:to-emerald-400 disabled:from-slate-500 disabled:to-slate-500 disabled:text-slate-400"
           />
         </form>
       </main>

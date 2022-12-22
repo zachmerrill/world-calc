@@ -1,7 +1,8 @@
 import Head from "next/head";
 import React, { useContext, useEffect, useReducer } from "react";
-import CountryOptions from "../../components/journey/countryOptions";
-import Title from "../../components/journey/title";
+import CountryOptions from "../../components/countryOptions";
+import JourneyNextButton from "../../components/journey/next";
+import Title from "../../components/title";
 import { JourneyContext } from "../../contexts/journeyContext";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
@@ -87,12 +88,12 @@ export default function Journey() {
               <CountryOptions />
             </select>
           </label>
-          <input
+          <JourneyNextButton
             disabled={!(!!form.name && !!form.country)}
             type="submit"
-            value="Next"
-            className="flex w-32 justify-center rounded-full bg-gradient-to-r from-emerald-600 via-emerald-600 to-emerald-400 p-2 font-bold text-cyan-50 hover:from-emerald-600 hover:to-emerald-400 disabled:from-slate-500 disabled:to-slate-500 disabled:text-slate-400"
-          />
+          >
+            Next
+          </JourneyNextButton>
         </form>
       </main>
     </>

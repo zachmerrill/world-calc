@@ -1,17 +1,17 @@
+import countries from "i18n-iso-countries";
+import enLocale from "i18n-iso-countries/langs/en.json";
 import Head from "next/head";
+import { useEffect, useState } from "react";
 import {
   ComposableMap,
   Geographies,
   Geography,
   ZoomableGroup,
 } from "react-simple-maps";
-import NextButton from "../../components/journey/next";
-import Title from "../../components/journey/title";
-import COLORS from "../../constants/colors";
 import useSWR from "swr";
-import countries from "i18n-iso-countries";
-import enLocale from "i18n-iso-countries/langs/en.json";
-import { useEffect, useState } from "react";
+import JourneyNavigation from "../../components/journey/navigation";
+import Title from "../../components/title";
+import COLORS from "../../constants/colors";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import dataFetcher from "../../util/dataFetcher";
 
@@ -45,12 +45,13 @@ export default function Countries() {
       <Head>
         <title>Countries | How Big is Your World?</title>
       </Head>
-      <main className="flex h-full flex-col">
-        <Title>Countries</Title>
-        <div className="flex h-full items-center justify-center">
+      <main className="flex h-full w-full flex-col justify-between">
+        <Title className="absolute z-10 w-full bg-white">Countries</Title>
+
+        <div className="absolute z-0 h-full w-full">
           {error ? <>Failed to load map. 😭</> : null}
           {data ? (
-            <ComposableMap className="h-full">
+            <ComposableMap className="absolute h-full w-full">
               <ZoomableGroup center={[0, 0]} zoom={1}>
                 <Geographies geography={data}>
                   {({ geographies }) =>
@@ -76,7 +77,10 @@ export default function Countries() {
             <>Loading...</>
           )}
         </div>
-        <NextButton onClick={handleSubmit} />
+        <JourneyNavigation
+          className="absolute bottom-0 z-10 w-full bg-white"
+          onClick={handleSubmit}
+        />
       </main>
     </>
   );
