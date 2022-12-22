@@ -1,7 +1,7 @@
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import Head from "next/head";
-import React, { useContext, useReducer } from "react";
+import React, { useContext, useEffect, useReducer } from "react";
 import { JourneyContext } from "../../contexts/journeyContext";
 import useLocalStorage from "../../hooks/useLocalStorage";
 countries.registerLocale(enLocale);
@@ -25,7 +25,17 @@ const initialState: Form = {
   country: "",
   valid: false,
 };
+
 export default function Journey() {
+  const [name, setName] = useLocalStorage<string>("name", "");
+  const [country, setCountry] = useLocalStorage<string>("country", "");
+
+  useEffect(() => {
+    // update form from localstorage if available
+    dispatch({ type: "nameChange", value: name });
+    dispatch({ type: "countryChange", value: country });
+  }, [name, country]);
+
   const [form, dispatch] = useReducer(
     (state: Form, action: { type: string; value: string }) => {
       switch (action.type) {
@@ -47,15 +57,16 @@ export default function Journey() {
     },
     initialState
   );
-  const [name, setName] = useLocalStorage("name");
   const { nextPage } = useContext(JourneyContext);
 
   function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
     const target = e.target as typeof e.target & {
       name: { value: string };
+      country: { value: string };
     };
     setName(target.name.value);
+    setCountry(target.country.value);
     nextPage();
   }
 
@@ -80,6 +91,7 @@ export default function Journey() {
               className="block w-full rounded-md border border-slate-300 bg-white py-2 px-3 shadow-sm placeholder:italic placeholder:text-slate-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
               type="text"
               placeholder="John Smith"
+              value={form.name}
               onChange={(e: React.FormEvent<HTMLInputElement>) =>
                 dispatch({ type: "nameChange", value: e.currentTarget.value })
               }
@@ -96,6 +108,7 @@ export default function Journey() {
                   value: e.currentTarget.value,
                 })
               }
+              value={form.country}
             >
               <option className="text-slate-400" value="">
                 Select a country
