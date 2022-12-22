@@ -1,10 +1,12 @@
 import { Html, Head, Main, NextScript } from "next/document";
+import COLORS from "../constants/colors";
 
 export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <meta name="theme-color" content="#03243d" />
+        <meta name="theme-color" content={COLORS.purple} />
+        <link rel="shortcut icon" href="/favicon.png" />
       </Head>
       <body>
         <Main />
