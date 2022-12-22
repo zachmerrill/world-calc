@@ -19,11 +19,17 @@ const initialState: Form = {
 
 export default function Family() {
   const [family, setFamily] = useLocalStorage<Form>("family", initialState);
+  const [you] = useLocalStorage<{ country: string }>("aboutYou", {
+    country: "",
+  });
 
   useEffect(() => {
+    // default family to your location
+    if (!family.fatherBirthLoc) family.fatherBirthLoc = you.country;
+    if (!family.motherBirthLoc) family.motherBirthLoc = you.country;
     // update form from localstorage if available
     updateForm(family);
-  }, [family]);
+  }, [family, you]);
 
   const [form, updateForm] = useReducer(
     (state: Form, action: Form) => ({
@@ -88,7 +94,7 @@ export default function Family() {
               }
             >
               <option className="text-slate-400" value="">
-                Unknown
+                Please select
               </option>
               <CountryOptions />
             </select>
@@ -104,13 +110,13 @@ export default function Family() {
               }
             >
               <option className="text-slate-400" value="">
-                Unknown
+                Please select
               </option>
               <CountryOptions />
             </select>
           </label>
           <input
-            disabled={!!!form.siblings}
+            disabled={!(!!form.fatherBirthLoc && !!form.motherBirthLoc)}
             type="submit"
             value="Next"
             className="flex w-32 justify-center rounded-full bg-gradient-to-r from-emerald-600 via-emerald-600 to-emerald-400 p-2 font-bold text-cyan-50 hover:from-emerald-600 hover:to-emerald-400 disabled:from-slate-500 disabled:to-slate-500 disabled:text-slate-400"
