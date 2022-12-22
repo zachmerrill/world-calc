@@ -1,60 +1,33 @@
-import countries from "i18n-iso-countries";
-import enLocale from "i18n-iso-countries/langs/en.json";
 import Head from "next/head";
 import React, { useContext, useEffect, useReducer } from "react";
+import CountryOptions from "../../components/journey/countryOptions";
+import Title from "../../components/journey/title";
 import { JourneyContext } from "../../contexts/journeyContext";
 import useLocalStorage from "../../hooks/useLocalStorage";
-countries.registerLocale(enLocale);
-const countryObj = countries.getNames("en", { select: "official" });
-
-const countryArr = Object.entries(countryObj).map(([key, value]) => {
-  return {
-    label: value,
-    value: key,
-  };
-});
 
 type Form = {
-  name: string;
-  country: string;
-  valid: boolean;
+  name?: string;
+  country?: string;
 };
 
 const initialState: Form = {
   name: "",
   country: "",
-  valid: false,
 };
 
 export default function Journey() {
-  const [name, setName] = useLocalStorage<string>("name", "");
-  const [country, setCountry] = useLocalStorage<string>("country", "");
+  const [you, setYou] = useLocalStorage<Form>("aboutYou", initialState);
 
   useEffect(() => {
     // update form from localstorage if available
-    dispatch({ type: "nameChange", value: name });
-    dispatch({ type: "countryChange", value: country });
-  }, [name, country]);
+    updateForm(you);
+  }, [you]);
 
-  const [form, dispatch] = useReducer(
-    (state: Form, action: { type: string; value: string }) => {
-      switch (action.type) {
-        case "nameChange":
-          return {
-            ...state,
-            name: action.value,
-            valid: !!action.value && !!state.country,
-          };
-        case "countryChange":
-          return {
-            ...state,
-            country: action.value,
-            valid: !!action.value && !!state.name,
-          };
-        default:
-          return state;
-      }
-    },
+  const [form, updateForm] = useReducer(
+    (state: Form, action: Form) => ({
+      ...state,
+      ...action,
+    }),
     initialState
   );
   const { nextPage } = useContext(JourneyContext);
@@ -65,21 +38,20 @@ export default function Journey() {
       name: { value: string };
       country: { value: string };
     };
-    setName(target.name.value);
-    setCountry(target.country.value);
+    setYou({ name: target.name.value, country: target.country.value });
     nextPage();
   }
 
   return (
     <>
       <Head>
-        <title>How Big is Your World?</title>
+        <title>Start | How Big is Your World?</title>
       </Head>
       <main>
-        <h1 className="mt-0 mb-2 text-6xl font-extrabold">
+        <Title>
           Tell me about yourself.{" "}
           <span className="font-extralight text-red-500">*</span>
-        </h1>
+        </Title>
         <p className="flex justify-end text-xs font-normal text-red-500">
           * This affects your score! 😱
         </p>
@@ -93,7 +65,7 @@ export default function Journey() {
               placeholder="John Smith"
               value={form.name}
               onChange={(e: React.FormEvent<HTMLInputElement>) =>
-                dispatch({ type: "nameChange", value: e.currentTarget.value })
+                updateForm({ name: e.currentTarget.value })
               }
             />
           </label>
@@ -103,9 +75,8 @@ export default function Journey() {
               name="country"
               className="block w-full rounded-md border border-slate-300 bg-white py-2 px-3 shadow-sm placeholder:italic placeholder:text-slate-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
               onChange={(e: React.FormEvent<HTMLSelectElement>) =>
-                dispatch({
-                  type: "countryChange",
-                  value: e.currentTarget.value,
+                updateForm({
+                  country: e.currentTarget.value,
                 })
               }
               value={form.country}
@@ -113,15 +84,11 @@ export default function Journey() {
               <option className="text-slate-400" value="">
                 Select a country
               </option>
-              {countryArr.map(({ label, value }) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
+              <CountryOptions />
             </select>
           </label>
           <input
-            disabled={!form.valid}
+            disabled={!(!!form.name && !!form.country)}
             type="submit"
             value="Next"
             className="flex w-32 justify-center rounded-full bg-gradient-to-r from-emerald-600 via-emerald-600 to-emerald-400 p-2 font-bold text-cyan-50 hover:from-emerald-600 hover:to-emerald-400 disabled:from-slate-500 disabled:to-slate-500 disabled:text-slate-400"
