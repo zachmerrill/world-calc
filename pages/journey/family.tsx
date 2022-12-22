@@ -3,6 +3,7 @@ import { useEffect, useReducer } from "react";
 import CountryOptions from "../../components/countryOptions";
 import JourneyNavigation from "../../components/journey/navigation";
 import Title from "../../components/title";
+import STORAGES from "../../constants/storages";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
 type Form = {
@@ -18,8 +19,11 @@ const initialState: Form = {
 };
 
 export default function Family() {
-  const [family, setFamily] = useLocalStorage<Form>("family", initialState);
-  const [you] = useLocalStorage<{ country: string }>("aboutYou", {
+  const [family, setFamily] = useLocalStorage<Form>(
+    STORAGES.family,
+    initialState
+  );
+  const [you] = useLocalStorage<{ country: string }>(STORAGES.you, {
     country: "",
   });
 

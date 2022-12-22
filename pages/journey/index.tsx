@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useReducer } from "react";
 import CountryOptions from "../../components/countryOptions";
 import JourneyNextButton from "../../components/journey/next";
 import Title from "../../components/title";
+import STORAGES from "../../constants/storages";
 import { JourneyContext } from "../../contexts/journeyContext";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
@@ -17,7 +18,7 @@ const initialState: Form = {
 };
 
 export default function Journey() {
-  const [you, setYou] = useLocalStorage<Form>("aboutYou", initialState);
+  const [you, setYou] = useLocalStorage<Form>(STORAGES.you, initialState);
 
   useEffect(() => {
     // update form from localstorage if available

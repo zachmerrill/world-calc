@@ -12,6 +12,7 @@ import useSWR from "swr";
 import JourneyNavigation from "../../components/journey/navigation";
 import Title from "../../components/title";
 import COLORS from "../../constants/colors";
+import STORAGES from "../../constants/storages";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import dataFetcher from "../../util/dataFetcher";
 
@@ -21,7 +22,10 @@ const ALPHA3CODES = countries.getAlpha3Codes();
 
 export default function Countries() {
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
-  const [countries, setCountries] = useLocalStorage<string[]>("countries", []);
+  const [countries, setCountries] = useLocalStorage<string[]>(
+    STORAGES.countries,
+    []
+  );
   const { data, error } = useSWR("/api/mapData", dataFetcher);
 
   useEffect(() => {
@@ -49,7 +53,6 @@ export default function Countries() {
         <Title className="absolute z-10 w-full bg-white">Countries</Title>
 
         <div className="absolute z-0 h-full w-full">
-          {error ? <>Failed to load map. 😭</> : null}
           {data ? (
             <ComposableMap className="absolute h-full w-full">
               <ZoomableGroup center={[0, 0]} zoom={1}>
@@ -73,6 +76,8 @@ export default function Countries() {
                 </Geographies>
               </ZoomableGroup>
             </ComposableMap>
+          ) : error ? (
+            <>Failed to load map. 😭</>
           ) : (
             <>Loading...</>
           )}

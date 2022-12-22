@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import JourneyNavigation from "../../components/journey/navigation";
 import Title from "../../components/title";
+import STORAGES from "../../constants/storages";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import dataFetcher from "../../util/dataFetcher";
 
@@ -35,7 +36,7 @@ export default function Cities() {
   const { data, error } = useSWR("/api/cityData", dataFetcher);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [citiesStorage, setCitiesStorage] = useLocalStorage<string[]>(
-    "cities",
+    STORAGES.cities,
     []
   );
 
@@ -64,7 +65,6 @@ export default function Cities() {
       <main className="flex h-full flex-col">
         <Title>Cities</Title>
         <div className="flex justify-center">
-          {error ? <>Failed to load city list. 😭</> : null}
           {data ? (
             <ul className="w-full items-center rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:flex">
               {data.map((city: string, index: number) => {
@@ -83,6 +83,8 @@ export default function Cities() {
                 );
               })}
             </ul>
+          ) : error ? (
+            <>Failed to load city list. 😭</>
           ) : (
             <>Loading...</>
           )}
