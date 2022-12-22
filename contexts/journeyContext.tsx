@@ -10,31 +10,28 @@ const JOURNEY = [
 ];
 
 export const JourneyContext = createContext<{
-  index: number;
-  nextPage: any;
+  nextPage: () => void;
 }>({
-  index: 0,
   nextPage: () => {},
 });
 
 export default function JourneyProvider({ children }: { children: any }) {
   const router = useRouter();
-  const [index, setIndex] = useState<number>(JOURNEY.indexOf(router.route));
+  const [nextRoute, setNextRoute] = useState<string>(
+    () => JOURNEY[JOURNEY.indexOf(router.route) + 1]
+  );
 
   useEffect(() => {
-    // prefetch next journey item
-    if (index < JOURNEY.length) router.prefetch(JOURNEY[index + 1]);
-  }, [index, router]);
+    const newIndex = JOURNEY.indexOf(router.route) + 1;
+    setNextRoute(JOURNEY[newIndex]);
+    router.prefetch(JOURNEY[newIndex]);
+  }, [router, router.route]);
 
   function nextPage() {
-    const newIndex = index + 1;
-    if (newIndex < JOURNEY.length) {
-      setIndex(newIndex);
-      router.push(`${JOURNEY[newIndex]}`);
-    }
+    router.push(nextRoute);
   }
   return (
-    <JourneyContext.Provider value={{ index, nextPage }}>
+    <JourneyContext.Provider value={{ nextPage }}>
       {children}
     </JourneyContext.Provider>
   );
