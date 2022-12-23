@@ -1,9 +1,21 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useContext } from "react";
+import { JourneyContext } from "../contexts/journeyContext";
+import { clearLocalStorage } from "../hooks/useLocalStorage";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
+  const router = useRouter();
+  const { pageList } = useContext(JourneyContext);
+
+  function handleStart() {
+    clearLocalStorage();
+    router.push(pageList[0]);
+  }
+
   return (
     <>
       <Head>
@@ -23,12 +35,12 @@ export default function Home() {
           </h1>
         </div>
         <div className="flex justify-center">
-          <Link
-            href="/journey"
+          <button
+            onClick={handleStart}
             className="flex w-32 justify-center rounded-full bg-gradient-to-r from-emerald-600 via-emerald-600 to-emerald-400 p-2 font-bold text-cyan-50 hover:from-emerald-600 hover:to-emerald-400"
           >
             Begin
-          </Link>
+          </button>
         </div>
         <div className="pointer-events-none absolute bottom-[-55%] h-full w-full">
           <Image src="/img/earth/earth-up.svg" alt="Earth" fill priority />
