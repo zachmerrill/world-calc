@@ -1,29 +1,30 @@
 import Head from "next/head";
 import { useEffect, useReducer } from "react";
+import { AboutYou } from ".";
 import CountryOptions from "../../components/countryOptions";
 import JourneyNavigation from "../../components/journey/navigation";
 import Title from "../../components/title";
 import STORAGES from "../../constants/storages";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
-type Form = {
+export type Family = {
   siblings?: number;
   fatherBirthLoc?: string;
   motherBirthLoc?: string;
 };
 
-const initialState: Form = {
+export const initialFamilyState: Family = {
   siblings: 0,
   fatherBirthLoc: "",
   motherBirthLoc: "",
 };
 
 export default function Family() {
-  const [family, setFamily] = useLocalStorage<Form>(
+  const [family, setFamily] = useLocalStorage<Family>(
     STORAGES.family,
-    initialState
+    initialFamilyState
   );
-  const [you] = useLocalStorage<{ country: string }>(STORAGES.you, {
+  const [you] = useLocalStorage<Omit<AboutYou, "name">>(STORAGES.you, {
     country: "",
   });
 
@@ -36,11 +37,11 @@ export default function Family() {
   }, [family, you]);
 
   const [form, updateForm] = useReducer(
-    (state: Form, action: Form) => ({
+    (state: Family, action: Family) => ({
       ...state,
       ...action,
     }),
-    initialState
+    initialFamilyState
   );
 
   function handleSubmit(e: React.SyntheticEvent) {

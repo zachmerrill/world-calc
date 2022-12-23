@@ -7,14 +7,16 @@ import STORAGES from "../../constants/storages";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import dataFetcher from "../../util/dataFetcher";
 
-const initialValue: string[] = ["English"];
+export const initialLanguagesValue: string[] = ["English"];
 
 export default function Languages() {
   const { data, error } = useSWR("/api/languageData", dataFetcher);
-  const [knownLanguages, setKnownLanguages] = useState<string[]>(initialValue);
+  const [knownLanguages, setKnownLanguages] = useState<string[]>(
+    initialLanguagesValue
+  );
   const [languagesStorage, setLanguagesStorage] = useLocalStorage<string[]>(
     STORAGES.languages,
-    initialValue
+    initialLanguagesValue
   );
   const [language, setLanguage] = useState<string>("Unknown");
   const [text, setText] = useState<string>("");

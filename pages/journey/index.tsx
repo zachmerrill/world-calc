@@ -7,18 +7,21 @@ import STORAGES from "../../constants/storages";
 import { JourneyContext } from "../../contexts/journeyContext";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
-type Form = {
+export type AboutYou = {
   name?: string;
   country?: string;
 };
 
-const initialState: Form = {
+export const initialYouState: AboutYou = {
   name: "",
   country: "",
 };
 
 export default function Journey() {
-  const [you, setYou] = useLocalStorage<Form>(STORAGES.you, initialState);
+  const [you, setYou] = useLocalStorage<AboutYou>(
+    STORAGES.you,
+    initialYouState
+  );
 
   useEffect(() => {
     // update form from localstorage if available
@@ -26,11 +29,11 @@ export default function Journey() {
   }, [you]);
 
   const [form, updateForm] = useReducer(
-    (state: Form, action: Form) => ({
+    (state: AboutYou, action: AboutYou) => ({
       ...state,
       ...action,
     }),
-    initialState
+    initialYouState
   );
   const { nextPage } = useContext(JourneyContext);
 
