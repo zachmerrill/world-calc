@@ -179,7 +179,21 @@ export default function Results() {
   );
 }
 
-function ResultChart({ title, desc, value, total, valueColor, totalColor }) {
+function ResultChart({
+  title,
+  desc,
+  value,
+  total,
+  valueColor,
+  totalColor,
+}: {
+  title: string;
+  desc: string;
+  value: number;
+  total: number;
+  valueColor: string;
+  totalColor: string;
+}) {
   return (
     <div className="grid grid-cols-4">
       <div className="col-span-3 flex flex-col justify-center">

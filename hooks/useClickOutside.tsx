@@ -5,7 +5,7 @@ export default function useClickOutside(
   callback: any
 ) {
   function handleClick(e: MouseEvent) {
-    if (ref.current && !ref.current.contains(e.target)) {
+    if (ref.current && !ref.current.contains(e.target as Node)) {
       callback();
     }
   }
