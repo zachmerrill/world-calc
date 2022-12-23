@@ -64,25 +64,34 @@ export default function Cities() {
       </Head>
       <main className="flex h-full flex-col">
         <Title>Cities</Title>
-        <div className="flex justify-center">
+        <div className="flex flex-col justify-center">
           {data ? (
-            <ul className="w-full items-center rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:flex">
-              {data.map((city: string, index: number) => {
-                const cityValue = city.toLowerCase();
+            <>
+              {Object.keys(data).map((region: string, regionIndex: number) => {
                 return (
-                  <City
-                    key={index}
-                    id={cityValue}
-                    value={cityValue}
-                    name={cityValue}
-                    onChange={handleChanged}
-                    checked={selectedCities.includes(cityValue)}
-                  >
-                    {city}
-                  </City>
+                  <div key={regionIndex}>
+                    {region}
+                    <ul className=" items-center rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:flex">
+                      {data[region].map((city: string, index: number) => {
+                        const cityValue = city.toLowerCase();
+                        return (
+                          <City
+                            key={index}
+                            id={cityValue}
+                            value={cityValue}
+                            name={cityValue}
+                            onChange={handleChanged}
+                            checked={selectedCities.includes(cityValue)}
+                          >
+                            {city}
+                          </City>
+                        );
+                      })}
+                    </ul>
+                  </div>
                 );
               })}
-            </ul>
+            </>
           ) : error ? (
             <>Failed to load city list. 😭</>
           ) : (
