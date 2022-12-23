@@ -9,6 +9,7 @@ import {
   ZoomableGroup,
 } from "react-simple-maps";
 import useSWR from "swr";
+import { AboutYou } from ".";
 import JourneyNavigation from "../../components/journey/navigation";
 import Layout from "../../components/layout";
 import Title from "../../components/title";
@@ -27,11 +28,21 @@ export default function Countries() {
     STORAGES.countries,
     []
   );
+  const [you] = useLocalStorage<Omit<AboutYou, "name">>(STORAGES.you, {
+    country: "",
+  });
   const { data, error } = useSWR("/api/mapData", dataFetcher);
 
   useEffect(() => {
-    setSelectedCountries(countries.map((code) => ALPHA2CODES[code]));
-  }, [countries]);
+    if (you.country) {
+      setSelectedCountries([
+        ALPHA2CODES[you.country],
+        ...countries.map((code) => ALPHA2CODES[code]),
+      ]);
+    } else {
+      setSelectedCountries(countries.map((code) => ALPHA2CODES[code]));
+    }
+  }, [countries, you]);
 
   function handleClick(id: string) {
     if (selectedCountries.includes(id)) {
