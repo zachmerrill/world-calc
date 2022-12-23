@@ -8,12 +8,3 @@ body,
   height: 100%;
   width: 100%;
 }
-
-:root {
-  --background-gradient: linear-gradient(
-    61.42deg,
-    #03243d 2.39%,
-    #4f0080 41.38%,
-    rgba(247, 219, 73, 0.75) 96.15%
-  );
-}

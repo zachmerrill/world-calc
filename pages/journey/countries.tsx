@@ -10,6 +10,7 @@ import {
 } from "react-simple-maps";
 import useSWR from "swr";
 import JourneyNavigation from "../../components/journey/navigation";
+import Layout from "../../components/layout";
 import Title from "../../components/title";
 import COLORS from "../../constants/colors";
 import STORAGES from "../../constants/storages";
@@ -49,13 +50,18 @@ export default function Countries() {
       <Head>
         <title>Countries | How Big is Your World?</title>
       </Head>
-      <main className="flex h-full w-full flex-col justify-between">
-        <Title className="absolute z-10 w-full bg-white">Countries</Title>
+      <Layout className="flex flex-col p-0">
+        <div className="p-4">
+          <Title>Countries</Title>
+          <p className="text-lg">
+            Select all countries on the map which you have visited.
+          </p>
+        </div>
 
-        <div className="absolute z-0 h-full w-full">
+        <div className="relative flex h-full items-center justify-center">
           {data ? (
-            <ComposableMap className="absolute h-full w-full">
-              <ZoomableGroup center={[0, 0]} zoom={1}>
+            <ComposableMap className="absolute left-0 h-full">
+              <ZoomableGroup center={[100, 0]} zoom={1}>
                 <Geographies geography={data}>
                   {({ geographies }) =>
                     geographies.map((geo) => (
@@ -70,6 +76,17 @@ export default function Countries() {
                         stroke="#fff"
                         strokeWidth={0.5}
                         onClick={() => handleClick(geo.id)}
+                        style={{
+                          default: {
+                            outline: "none",
+                          },
+                          hover: {
+                            outline: "none",
+                          },
+                          pressed: {
+                            outline: "none",
+                          },
+                        }}
                       />
                     ))
                   }
@@ -82,11 +99,8 @@ export default function Countries() {
             <>Loading...</>
           )}
         </div>
-        <JourneyNavigation
-          className="absolute bottom-0 z-10 w-full bg-white"
-          onClick={handleSubmit}
-        />
-      </main>
+        <JourneyNavigation onClick={handleSubmit} className="p-4" />
+      </Layout>
     </>
   );
 }

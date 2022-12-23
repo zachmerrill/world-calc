@@ -47,8 +47,8 @@ export default function Results() {
     if (!langData || !cityData) return -1;
     const langScore = languagesStorage.length / Object.keys(langData).length;
     const cities = [
-      ...cityData["Asia"],
-      ...cityData["Middle East"],
+      ...cityData["Eastern Asia"],
+      ...cityData["Western Asia"],
       ...cityData["Africa"],
       ...cityData["Europe"],
       ...cityData["North America"],

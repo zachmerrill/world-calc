@@ -5,9 +5,6 @@ export default function Title({
   ...rest
 }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
-    <h1
-      className={`mt-0 mb-2 text-6xl font-extrabold ${className}`}
-      {...rest}
-    />
+    <h1 className={`pb-4 text-5xl font-extrabold ${className}`} {...rest} />
   );
 }

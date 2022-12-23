@@ -6,7 +6,7 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <meta name="theme-color" content={COLORS.purple} />
-        <link rel="shortcut icon" href="/favicon.png" />
+        <link rel="shortcut icon" href="/img/logo-xs.png" />
       </Head>
       <body>
         <Main />

@@ -2,6 +2,9 @@ import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import JourneyNavigation from "../../components/journey/navigation";
+import Label from "../../components/label";
+import Layout from "../../components/layout";
+import TextInput from "../../components/textInput";
 import Title from "../../components/title";
 import STORAGES from "../../constants/storages";
 import useLocalStorage from "../../hooks/useLocalStorage";
@@ -57,52 +60,63 @@ export default function Languages() {
       <Head>
         <title>Languages | How Big is Your World?</title>
       </Head>
-      <main className="flex h-full flex-col">
-        <Title>Languages</Title>
-        {null}
-        {data ? (
-          <label>
-            Type &quot;How are you?&quot; in as many languages as you can.
-            <div className="grid grid-cols-4 items-center">
-              <input
+      <Layout className="flex flex-col justify-between gap-4">
+        <div>
+          <Title>Languages</Title>
+          {data ? (
+            <div className="grid grid-cols-6 items-center gap-2">
+              <div className="col-span-4 text-sm">
+                Type &quot;How are you?&quot; in as many languages as you can.
+              </div>
+              <div className="col-span-2 text-center text-xs">
+                Language Detection
+              </div>
+              <TextInput
+                className="col-span-4"
                 placeholder="How are you?"
-                className="col-span-3 block w-full rounded-md border border-slate-300 bg-white py-2 px-3 shadow-sm placeholder:text-slate-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
                 type="text"
                 value={text}
                 onChange={(e) => handleChange(e.currentTarget.value)}
               />
-              <button className="" onClick={handleClick}>
+              <button
+                className="col-span-2 flex w-full justify-center rounded-md bg-sky-600 p-2 font-bold text-cyan-50 hover:bg-sky-500 disabled:border-2  disabled:border-solid disabled:border-slate-500 disabled:bg-white disabled:text-slate-500"
+                disabled={language === "Unknown"}
+                onClick={handleClick}
+              >
+                {language !== "Unknown" && "+"}
                 {language}
               </button>
             </div>
-          </label>
-        ) : error ? (
-          <>Failed to load language list. 😭</>
-        ) : (
-          <>Loading...</>
-        )}
-        <h2>Languages Known:</h2>
-        <ul>
-          <>
-            {knownLanguages.map((lang, index) => (
-              <li key={index} className="flex gap-2">
-                {lang}{" "}
-                {lang === "English" && (
-                  <div className="inline-flex items-center rounded-full bg-green-200 px-3 py-1 text-xs font-bold uppercase text-green-700">
-                    FREE
-                  </div>
-                )}
-                {lang === warn && (
-                  <p className="inline-flex items-center text-xs text-red-500">
-                    ⬅ You already have this one!
-                  </p>
-                )}
-              </li>
-            ))}
-          </>
-        </ul>
+          ) : error ? (
+            <>Failed to load language list. 😭</>
+          ) : (
+            <>Loading...</>
+          )}
+          <h2 className="py-2 text-lg font-semibold">Languages Known:</h2>
+          <ul className="list-disc">
+            <>
+              {knownLanguages.map((lang, index) => (
+                <li key={index} className="ml-8">
+                  <span className="flex gap-2">
+                    {lang}{" "}
+                    {lang === "English" && (
+                      <div className="inline-flex items-center rounded-full bg-green-200 px-3 py-1 text-xs font-bold uppercase text-green-700">
+                        FREE
+                      </div>
+                    )}
+                    {lang === warn && (
+                      <p className="inline-flex items-center text-xs text-red-500">
+                        ⬅ You already have this one!
+                      </p>
+                    )}
+                  </span>
+                </li>
+              ))}
+            </>
+          </ul>
+        </div>
         <JourneyNavigation onClick={handleSubmit} />
-      </main>
+      </Layout>
     </>
   );
 }

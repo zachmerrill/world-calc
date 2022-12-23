@@ -2,6 +2,7 @@ import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import JourneyNavigation from "../../components/journey/navigation";
+import Layout from "../../components/layout";
 import Title from "../../components/title";
 import STORAGES from "../../constants/storages";
 import useLocalStorage from "../../hooks/useLocalStorage";
@@ -62,16 +63,22 @@ export default function Cities() {
       <Head>
         <title>Cities | How Big is Your World?</title>
       </Head>
-      <main className="flex h-full flex-col">
+      <Layout>
         <Title>Cities</Title>
-        <div className="flex flex-col justify-center">
+        <p className="text-lg">
+          Select all cities from the list which you have visited.
+        </p>
+        <div className="flex flex-col justify-center gap-8 pt-4 pb-8">
           {data ? (
             <>
               {Object.keys(data).map((region: string, regionIndex: number) => {
                 return (
-                  <div key={regionIndex}>
+                  <div
+                    key={regionIndex}
+                    className="flex flex-col gap-2 text-lg font-semibold"
+                  >
                     {region}
-                    <ul className=" items-center rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:flex">
+                    <ul className="items-center rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:flex">
                       {data[region].map((city: string, index: number) => {
                         const cityValue = city.toLowerCase();
                         return (
@@ -98,8 +105,8 @@ export default function Cities() {
             <>Loading...</>
           )}
         </div>
-        <JourneyNavigation onClick={handleSubmit} />
-      </main>
+        <JourneyNavigation onClick={handleSubmit} className="pb-4" />
+      </Layout>
     </>
   );
 }
