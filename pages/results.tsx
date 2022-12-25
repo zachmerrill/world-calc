@@ -58,17 +58,23 @@ export default function Results() {
 
   const worldSize = useMemo<number>(() => {
     if (!langData) return -1;
-    const langScore = languagesStorage.length / Object.keys(langData).length;
-    const cityScore = citiesStorage.length / cities.length;
-    const countriesScore =
-      countriesStorage.length / Object.keys(countryObj).length;
+    // calc max score
+    const maxSiblings = 12;
+    const maxFamilyScore = maxSiblings + 2;
+    const maxScore =
+      Object.keys(langData).length +
+      cities.length +
+      Object.keys(countryObj).length +
+      maxFamilyScore;
+
+    const langScore = languagesStorage.length;
+    const cityScore = citiesStorage.length;
+    const countriesScore = countriesStorage.length;
     let familyScore = familyStorage.siblings || 0;
     if (familyStorage.fatherBirthLoc !== youStorage.country) familyScore++;
     if (familyStorage.motherBirthLoc !== youStorage.country) familyScore++;
-    const youScore = youStorage.name?.length || 0;
-    return (
-      (langScore + cityScore + countriesScore + familyScore + youScore) * 100
-    );
+    const score = langScore + cityScore + countriesScore + Number(familyScore);
+    return (score / maxScore) * 100;
   }, [
     langData,
     languagesStorage.length,
@@ -79,7 +85,6 @@ export default function Results() {
     familyStorage.fatherBirthLoc,
     familyStorage.motherBirthLoc,
     youStorage.country,
-    youStorage.name?.length,
   ]);
 
   function handleClick() {
@@ -97,20 +102,11 @@ export default function Results() {
         {langData && cityData ? (
           <>
             <p className="text-lg">
-              You scored a{" "}
-              <u className="text-bold text-xl">{Math.round(worldSize)}</u> based
-              on your selections.
+              Your world is{" "}
+              <u className="text-bold text-xl">{Math.round(worldSize)}</u>% of
+              the earth!
             </p>
-            <p className="text-lg">Keep scrolling to find out why!</p>
-            <div>
-              <div className="flex flex-col justify-center py-2">
-                <p className="font-bold">About You</p>
-                <p className="text-sm">
-                  Your name is {youStorage.name?.length || 0} characters long --
-                  which we arbitrarily added to your score 😎
-                </p>
-              </div>
-            </div>
+            <p className="pt-10 text-lg">Here&apos;s your score breakdown:</p>
             <div>
               <div className="flex flex-col justify-center py-2">
                 <p className="font-bold">Family</p>
@@ -163,7 +159,7 @@ export default function Results() {
         ) : (
           <>Loading...</>
         )}
-        <div className="flex w-full justify-between py-4">
+        <div className="flex w-full justify-between py-4 pt-10">
           <JourneyNextButton onClick={() => prevPage()}>
             Previous
           </JourneyNextButton>
